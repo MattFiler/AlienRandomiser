@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Alien: Isolation Mission Randomiser")]
-[assembly: AssemblyDescription("Randomise mission order within Alien: Isolation")]
+[assembly: AssemblyDescription("Randomise mission order within Alien: Isolation!")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Matt Filer")]
 [assembly: AssemblyProduct("Alien: Isolation Mission Randomiser")]
-[assembly: AssemblyCopyright("Copyright © Matt Filer, JeffCat, Darkstar 2022")]
+[assembly: AssemblyCopyright("Copyright © Matt Filer, JeffCat, Darkstar 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

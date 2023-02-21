@@ -1,15 +1,13 @@
 ﻿using OpenCAGE;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharpCompress;
+using SharpCompress.Archives;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AlienRandomiser
 {
@@ -79,9 +77,10 @@ namespace AlienRandomiser
 
             label2.Font = FontManager.GetFont(2, 24);
 
-            randomiseOrder.Font = FontManager.GetFont(0, 20.25f);
+            randomiseOrder.Font = FontManager.GetFont(0, 18f);
             launchGame.Font = FontManager.GetFont(0, 20.25f);
             hideOrder.Font = FontManager.GetFont(0, 15.75f);
+            multiAlien.Font = FontManager.GetFont(0, 15.75f);
 
             difficultySelect.SelectedIndex = 0;
 
@@ -96,16 +95,16 @@ namespace AlienRandomiser
 
         private void launchGame_Click(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 CopyNewCommands();
                 StartGame();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                MessageBox.Show("Failed to set & start game!\nIs Alien: Isolation already open?", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.ToString());
+            //    MessageBox.Show("Failed to set & start game!\nIs Alien: Isolation already open?", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
 
         private void hideOrder_CheckedChanged(object sender, EventArgs e)
@@ -165,21 +164,23 @@ namespace AlienRandomiser
         {
             if (_missionMaps.Count == 0) return;
 
-            FileInfo[] commandsPAKs = new DirectoryInfo(_pathToCommands + "/").GetFiles("COMMANDS.PAK", SearchOption.AllDirectories);
-            foreach (MissionMapping mapping in _missionMaps)
+            byte[] content = File.ReadAllBytes("content.bin");
+            CommandsContent[] toWrite = new CommandsContent[100];
+            Parallel.For(0, _missionMaps.Count, i =>
             {
-                foreach (FileInfo commandsPAK in commandsPAKs)
+                IArchive archive = ArchiveFactory.Open(new MemoryStream(content));
+                foreach (IArchiveEntry commandsPAK in archive.Entries.Where(o => o.Key.Contains("COMMANDS.PAK")))
                 {
-                    string[] filePathSplit = commandsPAK.FullName.Substring(Application.StartupPath.Length + ("\\" + _pathToCommands + "\\").Length).Split('\\');
+                    string[] filePathSplit = commandsPAK.Key.Substring(_pathToCommands.Length + 1).Split('/');
 
                     if (filePathSplit[0].Substring(0, 1) == "_")
                     {
                         string level = filePathSplit[0].Substring(1, filePathSplit[0].Length - 1 - (" GLOBAL").Length);
-                        CopyCommandsToLevel(level, commandsPAK.FullName);
+                        toWrite[i] = new CommandsContent() { file = commandsPAK, path = level };
                     }
                     else
                     {
-                        if (filePathSplit[1] != mapping.ToString()) continue;
+                        if (filePathSplit[1] != _missionMaps[i].ToString()) continue;
 
                         if (filePathSplit[2] != "COMMANDS.PAK")
                         {
@@ -204,30 +205,41 @@ namespace AlienRandomiser
                             int difficulty = Convert.ToInt32(levelInfoSplit[1].Substring(1, 1));
                             if (difficulty != difficultySelect.SelectedIndex + 1) continue;
                         }
-                        mapping.did_find_pak = true;
-                        CopyCommandsToLevel(level, commandsPAK.FullName);
+                        _missionMaps[i].did_find_pak = true;
+                        toWrite[i] = new CommandsContent() { file = commandsPAK, path = level };
+                    }
+                }
+            });
+            for (int i = 0; i < toWrite.Length; i++)
+            {
+                for (int x = i + 1; x < toWrite.Length; x++)
+                {
+                    if (toWrite[x] != null && toWrite[i] != null &&
+                        toWrite[x].path == toWrite[i].path)
+                    {
+                        toWrite[i] = null;
                     }
                 }
             }
-            commandsPAKs = new DirectoryInfo(_pathToCommands + "/").GetFiles("*.PAK", SearchOption.TopDirectoryOnly);
-            foreach (FileInfo commandsPAK in commandsPAKs)
+            Parallel.ForEach(toWrite, write =>
             {
-                string level = Path.GetFileNameWithoutExtension(commandsPAK.Name);
-                CopyCommandsToLevel(level, commandsPAK.FullName);
-            }
+                CopyCommandsToLevel(write.path, write.file);
+            });
 
+#if DEBUG
             foreach (MissionMapping mapping in _missionMaps)
             {
                 if (!mapping.did_find_pak && !mapping.did_find_pak_paired)
                     Console.WriteLine("Failed to find PAK for mission " + mapping.mission_start + " -> " + mapping.mission_end + "!!");
             }
+#endif
         }
-        private void CopyCommandsToLevel(string levelName, string pathToPak)
+        private void CopyCommandsToLevel(string levelName, IArchiveEntry file)
         {
             string pathToLevelPak = _pathToAI + @"\DATA\ENV\PRODUCTION\" + levelName + @"\WORLD\COMMANDS.PAK";
+            Console.WriteLine(pathToLevelPak);
             File.Delete(pathToLevelPak);
-            File.Copy(pathToPak, pathToLevelPak);
-            //Console.WriteLine("COPYING\n" + pathToPak + "\nTO\n" + pathToLevelPak + "\n");
+            file.WriteToFile(pathToLevelPak);
         }
 
         private void StartGame()
@@ -254,6 +266,12 @@ namespace AlienRandomiser
             {
                 return "M" + mission_start + " to M" + mission_end;
             }
+        }
+
+        private class CommandsContent
+        {
+            public string path;
+            public IArchiveEntry file;
         }
     }
 }

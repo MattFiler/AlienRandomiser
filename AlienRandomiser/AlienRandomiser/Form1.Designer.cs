@@ -90,6 +90,7 @@
             this.pictureBox19 = new System.Windows.Forms.PictureBox();
             this.hideOrder = new System.Windows.Forms.CheckBox();
             this.difficultySelect = new System.Windows.Forms.ComboBox();
+            this.multiAlien = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox20)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
@@ -510,21 +511,21 @@
             // 
             // randomiseOrder
             // 
-            this.randomiseOrder.Font = new System.Drawing.Font("Isolation", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.randomiseOrder.Font = new System.Drawing.Font("Isolation", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.randomiseOrder.Location = new System.Drawing.Point(45, 529);
             this.randomiseOrder.Name = "randomiseOrder";
-            this.randomiseOrder.Size = new System.Drawing.Size(178, 81);
+            this.randomiseOrder.Size = new System.Drawing.Size(388, 43);
             this.randomiseOrder.TabIndex = 107;
-            this.randomiseOrder.Text = "Randomise Order";
+            this.randomiseOrder.Text = "Randomise";
             this.randomiseOrder.UseVisualStyleBackColor = true;
             this.randomiseOrder.Click += new System.EventHandler(this.randomiseOrder_Click);
             // 
             // launchGame
             // 
             this.launchGame.Font = new System.Drawing.Font("Isolation", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.launchGame.Location = new System.Drawing.Point(251, 529);
+            this.launchGame.Location = new System.Drawing.Point(45, 617);
             this.launchGame.Name = "launchGame";
-            this.launchGame.Size = new System.Drawing.Size(178, 81);
+            this.launchGame.Size = new System.Drawing.Size(387, 59);
             this.launchGame.TabIndex = 108;
             this.launchGame.Text = "Launch Game";
             this.launchGame.UseVisualStyleBackColor = true;
@@ -535,7 +536,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Nostromo Cond", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(608, 104);
+            this.label2.Location = new System.Drawing.Point(608, 138);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(287, 35);
             this.label2.TabIndex = 110;
@@ -545,7 +546,7 @@
             // 
             this.pictureBox20.BackgroundImage = global::AlienRandomiser.Properties.Resources.logo;
             this.pictureBox20.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox20.Location = new System.Drawing.Point(549, 7);
+            this.pictureBox20.Location = new System.Drawing.Point(549, 41);
             this.pictureBox20.Name = "pictureBox20";
             this.pictureBox20.Size = new System.Drawing.Size(412, 102);
             this.pictureBox20.TabIndex = 109;
@@ -735,7 +736,7 @@
             // 
             this.pictureBox19.BackgroundImage = global::AlienRandomiser.Properties.Resources.ripley;
             this.pictureBox19.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox19.Location = new System.Drawing.Point(300, 70);
+            this.pictureBox19.Location = new System.Drawing.Point(300, 104);
             this.pictureBox19.Name = "pictureBox19";
             this.pictureBox19.Size = new System.Drawing.Size(855, 591);
             this.pictureBox19.TabIndex = 54;
@@ -746,7 +747,7 @@
             this.hideOrder.AutoSize = true;
             this.hideOrder.Font = new System.Drawing.Font("Isolation", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.hideOrder.ForeColor = System.Drawing.SystemColors.Control;
-            this.hideOrder.Location = new System.Drawing.Point(454, 541);
+            this.hideOrder.Location = new System.Drawing.Point(180, 581);
             this.hideOrder.Name = "hideOrder";
             this.hideOrder.Size = new System.Drawing.Size(137, 29);
             this.hideOrder.TabIndex = 111;
@@ -762,17 +763,30 @@
             "EASY",
             "MEDIUM",
             "HARD"});
-            this.difficultySelect.Location = new System.Drawing.Point(454, 576);
+            this.difficultySelect.Location = new System.Drawing.Point(322, 584);
             this.difficultySelect.Name = "difficultySelect";
-            this.difficultySelect.Size = new System.Drawing.Size(170, 21);
+            this.difficultySelect.Size = new System.Drawing.Size(110, 21);
             this.difficultySelect.TabIndex = 112;
+            // 
+            // multiAlien
+            // 
+            this.multiAlien.AutoSize = true;
+            this.multiAlien.Font = new System.Drawing.Font("Isolation", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.multiAlien.ForeColor = System.Drawing.SystemColors.Control;
+            this.multiAlien.Location = new System.Drawing.Point(45, 581);
+            this.multiAlien.Name = "multiAlien";
+            this.multiAlien.Size = new System.Drawing.Size(129, 29);
+            this.multiAlien.TabIndex = 113;
+            this.multiAlien.Text = "Multi-Alien";
+            this.multiAlien.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ClientSize = new System.Drawing.Size(1034, 630);
+            this.ClientSize = new System.Drawing.Size(1034, 707);
+            this.Controls.Add(this.multiAlien);
             this.Controls.Add(this.difficultySelect);
             this.Controls.Add(this.hideOrder);
             this.Controls.Add(this.label2);
@@ -927,6 +941,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox hideOrder;
         private System.Windows.Forms.ComboBox difficultySelect;
+        private System.Windows.Forms.CheckBox multiAlien;
     }
 }
 
